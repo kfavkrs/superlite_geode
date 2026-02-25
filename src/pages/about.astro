@@ -1,0 +1,80 @@
+---
+import { Image } from "astro:assets";
+import Layout from "../layouts/Layout.astro";
+import { aboutPageContent, identity } from "../config";
+import SocialLinkBox from "../components/SocialLinkBox.astro";
+import {marked} from "marked"
+
+const pageDescription = marked.parse(aboutPageContent.about.description)
+const workDescription = marked.parse(aboutPageContent.work.description)
+const connectDescription = marked.parse(aboutPageContent.connect.description)
+
+// Split the subtitle by the colon to inject a line break
+const [mainTitle, ...subTitleParts] = aboutPageContent.subtitle.split(':');
+const subTitle = subTitleParts.join(':').trim();
+---
+
+<Layout seo={aboutPageContent.seo}>
+  <section class="mt-10 max-w-3xl mx-auto px-6">
+    <h1 class="font-bold text-3xl text-center mb-10">
+      {mainTitle}:<br/>
+      <span class="text-2xl font-medium opacity-80 mt-2 inline-block">{subTitle}</span>
+    </h1>
+    
+    <div class="mb-16 space-y-6 markdown-content">
+      <Fragment set:html={pageDescription} />
+    </div>
+
+    <div class="mb-16 space-y-6 markdown-content opacity-80">
+      <Fragment set:html={workDescription} />
+    </div>
+  </section>
+  <section class="mt-16 max-w-3xl mx-auto px-6 sm:flex sm:gap-16">
+    <h2 class="mb-8 sm:mb-0 opacity-60">Connect</h2>
+    <div>
+      <div class="mb-6">
+        <Fragment set:html={connectDescription} />
+      </div>
+      <div class="grid grid-cols-2 gap-2 group">
+        {
+          aboutPageContent.connect.links.map((item) => (
+            <SocialLinkBox {...item} />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const link = document.getElementById('phone-link') as HTMLAnchorElement;
+  const label = document.getElementById('phone-label');
+  if (link && label) {
+    link.addEventListener('click', (e) => {
+      const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      if (!isMobile) {
+        e.preventDefault();
+        navigator.clipboard.writeText('+1 (415) 335-9911').then(() => {
+          label.textContent = 'Copied!';
+          setTimeout(() => { label.textContent = 'Call or Text Me'; }, 2000);
+        });
+      }
+    });
+  }
+
+  const connectPhoneLink = document.querySelector('a[href^="tel:"]:not(#phone-link)') as HTMLAnchorElement | null;
+  if (connectPhoneLink) {
+    const connectLabel = connectPhoneLink.querySelector('p');
+    connectPhoneLink.addEventListener('click', (e) => {
+      const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      if (!isMobile && connectLabel) {
+        e.preventDefault();
+        navigator.clipboard.writeText('+1 (415) 335-9911').then(() => {
+          const original = connectLabel.textContent;
+          connectLabel.textContent = 'Copied!';
+          setTimeout(() => { connectLabel.textContent = original; }, 2000);
+        });
+      }
+    });
+  }
+</script>

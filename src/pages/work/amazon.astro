@@ -1,0 +1,108 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { identity } from "../../config";
+import SocialLinkBox from "../../components/SocialLinkBox.astro";
+import { socialLinks } from "../../config";
+
+const seo = {
+  title: "Current Work | Ezra Stjärna-Shively",
+  description:
+    "Program Manager II at Amazon - Global Technical Programs in Automation, AI, Process Engineering, and Ops Tech.",
+  image: identity.logo,
+};
+---
+
+<Layout seo={seo}>
+  <section class="mt-10 max-w-2xl mx-auto px-6">
+    <h1 class="font-bold text-3xl mb-1">Current Work</h1>
+    <p class="opacity-60 mb-10">
+      Global Technical Program Manager II | AI/ML Automation | Process Engineering | Operations Technology
+    </p>
+
+    <div class="flex items-center gap-4 mb-6">
+      <img
+        src="/superlite_geode/assets/amazon-logo.jpg"
+        alt="Amazon"
+        width={60}
+        height={60}
+        class="rounded w-[60px] h-[60px] object-contain bg-white"
+      />
+      <div>
+        <h2 class="font-semibold text-xl">Amazon</h2>
+        <p class="opacity-60">Mar 2020 – Present · 6 yrs · Full-time</p>
+        <p class="opacity-60 text-sm">Seattle, Washington, United States · Remote</p>
+      </div>
+    </div>
+
+    <p class="mb-10 opacity-80">
+      Technical program leader who architected AI/ML-enabled automation systems serving 1M+ Amazon sellers — removing 600,000+ labor hours over 5 years while delivering $17M budget impact across a 2,200-person organization.
+    </p>
+
+    <div class="space-y-8 mb-10">
+      <div>
+        <p class="text-sm font-semibold opacity-80 mb-3">AI/ML IMPLEMENTATION</p>
+        <ul class="space-y-2 text-sm opacity-60 list-disc pl-5">
+          <li>First person in 2,200-person org to leverage AWS Bedrock (Claude, Titan) for advanced statistical modeling</li>
+          <li>Diagnosed capacity planning problem that defeated every prior approach for 5+ years; restored forecasting accuracy from 71% error rate to 95%+</li>
+          <li>Proof-of-concept from scratch to validate feasibility before committing resources</li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="text-sm font-semibold opacity-80 mb-3">PROGRAM LEADERSHIP AT SCALE</p>
+        <ul class="space-y-2 text-sm opacity-60 list-disc pl-5">
+          <li>Built Associate Idea Share program from 2-person pilot → 22-person global engine spanning 5 regions, 1M+ Amazon sellers</li>
+          <li>Drove $17M budget impact, prevented $8.6M cost leakage, architected systems running 386,000 automated cases/year without human intervention</li>
+          <li>50% YoY output increase (58,842 → 88,000 hours); team size 16 → 5 FTE; ~3.5× productivity gains</li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="text-sm font-semibold opacity-80 mb-3">SYSTEMS THINKING</p>
+        <ul class="space-y-2 text-sm opacity-60 list-disc pl-5">
+          <li>Architect end-to-end distributed systems; partner with L7 engineers to scope SDE-weeks and define API integration points</li>
+          <li>Map human + technical systems to find intervention points</li>
+          <li>Organizations at scale: cross-org stakeholder alignment, influence without authority, operations technology</li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="text-sm font-semibold opacity-80 mb-3">ADDITIONAL</p>
+        <ul class="space-y-2 text-sm opacity-60 list-disc pl-5">
+          <li>Amazon Bar Raiser, 4-year internal leadership mentor, working board member</li>
+          <li>Founder: Shively Endowed Scholarship Fund in Columbus, Ohio</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-16 max-w-2xl mx-auto px-6 sm:flex sm:gap-16">
+    <h2 class="mb-8 sm:mb-0 opacity-60">Connect</h2>
+    <div>
+      <div class="mb-6">
+        <p>Interested in discussing automation, process engineering, or technical program management? Let's connect.</p>
+      </div>
+      <div class="grid grid-cols-2 gap-2 group">
+        {socialLinks.map((item) => <SocialLinkBox {...item} />)}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const amazonPhoneLink = document.querySelector('main a[href^="tel:"]') as HTMLAnchorElement | null;
+  if (amazonPhoneLink) {
+    const amazonLabel = amazonPhoneLink.querySelector('p');
+    amazonPhoneLink.addEventListener('click', (e) => {
+      const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      if (!isMobile && amazonLabel) {
+        e.preventDefault();
+        navigator.clipboard.writeText('+1 (415) 335-9911').then(() => {
+          const original = amazonLabel.textContent;
+          amazonLabel.textContent = 'Copied!';
+          setTimeout(() => { amazonLabel.textContent = original; }, 2000);
+        });
+      }
+    });
+  }
+</script>

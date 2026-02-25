@@ -1,0 +1,131 @@
+---
+import { Image } from "astro:assets";
+import Layout from "../layouts/Layout.astro";
+import { homePageContent, identity, projectsPageContent } from "../config";
+import Link from "../components/Link.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("posts");
+posts.sort((a, b) => {
+  const dateA = new Date(a.data.pubDate).getTime();
+  const dateB = new Date(b.data.pubDate).getTime();
+  return dateB - dateA;
+});
+posts.splice(2);
+---
+
+<Layout seo={homePageContent.seo}>
+  <section class="mt-4 max-w-3xl mx-auto mb-10 relative rounded-2xl overflow-hidden w-full flex flex-col items-center justify-center text-center">
+    <Image 
+      src="/superlite_geode/custom-hero.jpg" 
+      alt="Geode Solutions Hero Banner" 
+      width={1200} 
+      height={400} 
+      class="w-full h-auto object-contain block z-0"
+    />
+    <div class="absolute inset-0 z-20 text-white w-full px-6 flex flex-col justify-center items-center drop-shadow-md">
+      <h1 class="font-bold text-4xl sm:text-5xl mb-3 drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)] !text-white">{identity.name}</h1>
+      <p class="opacity-100 text-lg sm:text-xl font-medium drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)] !text-white">{homePageContent.role}</p>
+    </div>
+  </section>
+
+  <section class="max-w-3xl mx-auto px-6">
+
+    <p class="max-w-3xl mb-2">
+      {homePageContent.description}
+    </p>
+    {/* <p class="text-sm opacity-60 mt-2 mb-6">Currently exploring Director TPM, VP Technical Operations, and Senior Program Management roles in Seattle.</p> */}
+    <div class="flex items-center gap-4 group w-fit mb-8">
+      {
+        homePageContent.links.map((link) => (
+          <Link text={link.title} href={link.url} external={link.external} />
+        ))
+      }
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-6 mb-8">
+      <div>
+        <p class="text-2xl font-bold">$20B+</p>
+        <p class="text-xs opacity-60 mt-1">Aggregate Project Value</p>
+      </div>
+      <div>
+        <p class="text-2xl font-bold">53</p>
+        <p class="text-xs opacity-60 mt-1">Nations of Operation</p>
+      </div>
+      <div>
+        <p class="text-2xl font-bold">40+</p>
+        <p class="text-xs opacity-60 mt-1">Years Strategic Architecture</p>
+      </div>
+      <div>
+        <p class="text-2xl font-bold">5GW+</p>
+        <p class="text-xs opacity-60 mt-1">Clean Energy Sourced</p>
+      </div>
+      <div>
+        <p class="text-2xl font-bold">$420M</p>
+        <p class="text-xs opacity-60 mt-1">Vertical Ecosystems Designed</p>
+      </div>
+      <div>
+        <p class="text-2xl font-bold">$7.5B</p>
+        <p class="text-xs opacity-60 mt-1">Strategic Asset Portfolios</p>
+      </div>
+    </div>
+  </section>
+  </section>
+
+  <section class="mt-20 max-w-3xl mx-auto px-6">
+    <h2 class="mb-8 font-bold text-3xl">Major Case Studies</h2>
+    <div class="grid grid-cols-1 group mb-10">
+      {
+        projectsPageContent.projects.slice(0, 6).map((project) => (
+          <ProjectCard {...project} />
+        ))
+      }
+    </div>
+    <div class="text-center">
+      <a
+        href={`${import.meta.env.BASE_URL}/lab`}
+        class="underline underline-offset-4 opacity-60 hover:opacity-100 transition-opacity"
+      >
+        View all case studies
+      </a>
+    </div>
+  </section>
+
+  <section class="mt-20 max-w-3xl mx-auto px-6">
+    <h2 class="mb-8 font-bold text-3xl">Recent Thinking</h2>
+    <div class="grid grid-cols-1 gap-10 sm:gap-6 mb-10">
+      {
+        posts.map((post) => (
+          <a
+            href={`${import.meta.env.BASE_URL}/thinking/${post.id}`}
+            class=" sm:flex sm:flex-row-reverse sm:justify-between sm:gap-6 post"
+          >
+            <Image
+              src={post.data.image.url}
+              alt={post.data.image.alt}
+              width={100}
+              height={100}
+              class={"rounded-lg w-[100px] h-[100px] object-cover"}
+            />
+            <div class="mt-4 sm:my-auto">
+              <p class="opacity-60 mb-2">
+                {post.data.pubDate.toLocaleDateString()}
+              </p>
+              <h3 class="font-medium hover-underline">{post.data.title}</h3>
+              <p class="text-sm opacity-60 mt-2 mb-3">
+                {post.data.description}
+              </p>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+    <div class="text-center">
+      <a
+        href={`${import.meta.env.BASE_URL}/thinking`}
+        class="underline underline-offset-4 opacity-60 hover:opacity-100 transition-opacity"
+        >View all</a
+      >
+    </div>
+  </section>
+</Layout>

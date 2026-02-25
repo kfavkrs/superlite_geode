@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+:root {
+  --color-bg: #ffffff;
+  --color-text: #000000;
+  --color-secondary: #0C3C60;
+  --color-accent: #0C3C60;
+  /* Original Red: #8f1212 */
+}
+
+html {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-secondary);
+}
+
+a {
+  color: var(--color-text);
+  transition: color 0.2s, opacity 0.2s;
+}
+
+a:hover {
+  color: var(--color-accent);
+}
+
+/* Custom Markdown Content Styling (Fallback for missing Typography plugin) */
+.markdown-content p {
+  margin-bottom: 1.5rem;
+}
+
+.markdown-content ol {
+  list-style-type: decimal;
+  padding-left: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.markdown-content li {
+  margin-bottom: 1rem;
+}
+
+.markdown-content li::marker {
+  color: var(--color-secondary);
+  font-weight: bold;
+}

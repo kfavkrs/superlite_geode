@@ -1,0 +1,91 @@
+---
+import type { Project } from "../types/config";
+import { marked } from "marked";
+
+type Props = Project;
+
+const { title, description, image, year, url } = Astro.props;
+
+const htmlDescription = marked.parse(description);
+---
+
+<div
+  class="project-card cursor-pointer sm:py-5 py-10 flex flex-col sm:flex-row gap-6 group-hover:opacity-60 hover:!opacity-100 transition-opacity"
+  tabindex="0"
+  role="button"
+>
+  <div class="h-full bg-gray-700 rounded-lg aspect-video sm:h-[150px] shrink-0">
+    <img
+      src={image}
+      alt={title}
+      class="w-full h-full object-cover rounded-lg aspect-video"
+      loading="lazy"
+    />
+  </div>
+  <div>
+    <div class="flex items-center gap-1 mb-2">
+      <h2 class="font-medium text-xl">{title}</h2>
+      <span class="opacity-60">· {year}</span>
+    </div>
+    <div class="project-content opacity-80 text-sm mt-1 markdown-content line-clamp-3 overflow-hidden">
+      <Fragment set:html={htmlDescription} />
+    </div>
+    <span class="read-more-text inline-block mt-3 text-xs font-bold text-[var(--color-secondary)] uppercase tracking-wider">
+      Read Case Study &rarr;
+    </span>
+  </div>
+</div>
+
+<script>
+  // Use a reliable way to run after DOM loads, Astro scripts run at module level natively.
+  const cards = document.querySelectorAll('.project-card');
+  
+  cards.forEach(card => {
+    card.addEventListener('click', () => {
+      const content = card.querySelector('.project-content');
+      const readMoreText = card.querySelector('.read-more-text');
+      const isExpanded = card.classList.contains('is-expanded');
+      
+      // Close all other cards first
+      cards.forEach(otherCard => {
+        if (otherCard !== card) {
+          otherCard.classList.remove('is-expanded');
+          const otherContent = otherCard.querySelector('.project-content');
+          const otherText = otherCard.querySelector('.read-more-text');
+          if (otherContent) otherContent.classList.add('line-clamp-3');
+          if (otherText) otherText.innerHTML = 'Read Case Study &rarr;';
+        }
+      });
+      
+      // Toggle the clicked card
+      if (isExpanded) {
+        card.classList.remove('is-expanded');
+        content?.classList.add('line-clamp-3');
+        if (readMoreText) readMoreText.innerHTML = 'Read Case Study &rarr;';
+      } else {
+        card.classList.add('is-expanded');
+        content?.classList.remove('line-clamp-3');
+        if (readMoreText) readMoreText.innerHTML = 'Close Case Study &uarr;';
+      }
+    });
+
+    // Keyboard accessibility
+    card.addEventListener('keydown', (e: Event) => {
+      const keyboardEvent = e as KeyboardEvent;
+      if (keyboardEvent.key === 'Enter' || keyboardEvent.key === ' ') {
+        e.preventDefault();
+        (card as HTMLElement).click();
+      }
+    });
+  });
+</script>
+
+<style>
+  /* Ensure paragraph tags inside the markdown content have proper spacing but remove bottom margin from last one so it fits nicely. */
+  .markdown-content :global(p) {
+    margin-bottom: 1em;
+  }
+  .markdown-content :global(p:last-child) {
+    margin-bottom: 0;
+  }
+</style>
